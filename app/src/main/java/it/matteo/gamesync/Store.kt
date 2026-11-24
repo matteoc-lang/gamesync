@@ -16,6 +16,7 @@ object Store {
     }
     var autoOpen: Boolean get() = p.getBoolean("auto_open", true); set(v) { p.edit().putBoolean("auto_open", v).apply() }
     var watchdog: Boolean get() = p.getBoolean("watchdog", true); set(v) { p.edit().putBoolean("watchdog", v).apply() }
+    var landscape: Boolean get() = p.getBoolean("landscape", false); set(v) { p.edit().putBoolean("landscape", v).apply() }
     var lastLog: String get() = p.getString("log", "") ?: ""; set(v) { p.edit().putString("log", v).apply() }
 
     private fun Entry.json() = JSONObject().put("id", id).put("name", name).put("pkg", pkg)
