@@ -1,0 +1,7 @@
+<resources>
+    <usb-device class="3"/>            <!-- HID -->
+    <usb-device vendor-id="1118"/>     <!-- Microsoft -->
+    <usb-device vendor-id="1356"/>     <!-- Sony -->
+    <usb-device vendor-id="1406"/>     <!-- Nintendo -->
+    <usb-device vendor-id="11720"/>    <!-- 8BitDo -->
+</resources>
