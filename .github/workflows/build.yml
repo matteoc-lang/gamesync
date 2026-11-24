@@ -11,13 +11,33 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Prepara Android SDK (gia' presente sul runner)
+      - name: Prepara Android SDK
         run: |
           : "${ANDROID_HOME:=/usr/local/lib/android/sdk}"
           SDKMANAGER=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)
-          echo "Uso: $SDKMANAGER"
           yes | "$SDKMANAGER" --licenses > /dev/null || true
           "$SDKMANAGER" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Verifica integrita file
+        run: |
+          find app/src -type f -printf '%8s  %p\n' | sort -n
+          echo "=== prime 3 righe del manifest ==="
+          head -n 3 app/src/main/AndroidManifest.xml
+          echo "=== controllo XML ==="
+          python3 - <<'EOF'
+          import glob, sys, xml.dom.minidom
+          files = glob.glob('app/src/**/*.xml', recursive=True)
+          bad = []
+          for f in files:
+              try:
+                  xml.dom.minidom.parse(f)
+              except Exception as e:
+                  bad.append((f, e))
+          for f, e in bad:
+              print('XML ROTTO:', f, '->', e)
+          print('controllati:', len(files), '| rotti:', len(bad))
+          sys.exit(1 if bad else 0)
+          EOF
 
       - uses: gradle/actions/setup-gradle@v4
         with:
